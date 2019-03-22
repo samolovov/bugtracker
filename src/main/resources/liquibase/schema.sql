@@ -18,7 +18,7 @@ create table task
   title       varchar     not null,
   description text,
   status      varchar(16) not null,
-  priority    integer,
+  priority    integer     not null,
   created     timestamp   not null,
   modified    timestamp   not null,
   deleted     boolean     not null default false,

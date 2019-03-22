@@ -31,8 +31,8 @@ public class Task extends PersistentEntity {
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
-    @Column(name = "priority")
-    private Integer priority;
+    @Column(name = "priority", nullable = false)
+    private int priority;
 
     @ManyToOne
     @JoinColumn(
