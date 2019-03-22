@@ -57,7 +57,7 @@ public class TaskService extends PersistentService<TaskBean, Task> {
         checkNotNull(project, PROJECT_NOT_FOUND, HttpStatus.NOT_FOUND);
 
         Task task = taskRepository.findOneById(bean.getId());
-        checkNotNull(project, TASK_NOT_FOUND, HttpStatus.NOT_FOUND);
+        checkNotNull(task, TASK_NOT_FOUND, HttpStatus.NOT_FOUND);
         checkFalse(task.getStatus() == TaskStatus.CLOSED, TASK_UPDATE_FORBIDDEN, HttpStatus.FORBIDDEN);
 
         task.setProject(project);
