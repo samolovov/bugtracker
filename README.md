@@ -1,40 +1,41 @@
-Образцы запросов:
+## BugTracker Application
 
-* Получить список проектов
-curl http://localhost:8080/projects
-* Получить проект
-curl http://localhost:8080/projects/1
-* Создать проект
-curl -H "Content-Type: application/json" -X POST -d '{"title": "New project", "description": "New description"}' http://localhost:8080/projects
-* Обновить проект
+### Description
+This application provides REST API for creating/viewing/updating/deleting projects and tasks. One project can contain many tasks. Soft-delete is implemented for deleting entities: i.e. entities aren't removed from DB, but 'deleted' property is set to 'true' for them instead. 
+
+### Installation guide
+BugTracker Application is developed using Spring Boot. In order to launch it you need to do the following steps:
+* Install PostgreSQL database. (You can use any other, but in this case you need to provide maven depencency in pom.xml)    
+* Clone/Download current repository
+* Edit application.yml (datasource section) and provide your DBhost/username/password settings
+* Compile and run as common java app, Application.java contains main method that start Tomcat container.
+
+### Request examples:
+
+#### Basic queries
+* Get projects: curl http://localhost:8080/projects
+* Get project with ID: curl http://localhost:8080/projects/1
+* Create project: curl -H "Content-Type: application/json" -X POST -d '{"title": "New project", "description": "New description"}' http://localhost:8080/projects
+* Update project with ID: 
 curl -H "Content-Type: application/json" -X PUT -d '{"title": "Updated title", "description": "Updated description"}' http://localhost:8080/projects/1
-* Удалить проект
-curl -X DELETE http://localhost:8080/projects/1
-* Получить полный список задач
+* Delete project with ID: curl -X DELETE http://localhost:8080/projects/1
+* Get tasks for all projects:
 curl http://localhost:8080/projects/-/tasks
-* Получить список задач проекта
+* Get tasks for project with ID:
 curl http://localhost:8080/projects/1/tasks
-* Получить задачу проекта
+* Get task with taskID for project with projectID:
 curl http://localhost:8080/projects/1/tasks/1
-* Cоздать задачу проекта
+* Create task for project with ID:
 curl -H "Content-Type: application/json" -X POST -d '{"title": "New task", "description": "New task description", "status":"NEW", priority": 1}' http://localhost:8080/projects/1/tasks
-* Обновить задачу проекта
+* Update task with taskID for project with projectID:
 curl -H "Content-Type: application/json" -X PUT -d '{"title": "Updated task", "description": "Updated description", "status":"IN_PROGRESS", priority": 3}' http://localhost:8080/projects/1/tasks/1
-* Удалить задачу проекта
+* Delete task with taskID for project with projectID
 curl -X DELETE http://localhost:8080/projects/1/tasks/1
 
-Пагинация:
-* Для пагинации в запросе необходимо передавать в урле следующие (опциональные) параметры:
-  '?page=0&size=3'
+#### Additional queries
+You can provide additional optional parameters in order to use pagination, sorting and filtering.
+* For pagination: '?page=0&size=3'
+* For sorting:    '?sort=priority,asc&sort=created,desc'
+* For filtering:  '?createdStart=18-03-2019&createdEnd=26-03-2019&modifiedStart=18-03-2019&modifiedEnd=26-03-2019&status=NEW&priority=1' 
 
-Сортировка:
-* Для сортировки в запросе необходимо передавать в урле следующие (опциональные) параметры:
-  '?sort=priority,desc', '?sort=priority,asc&sort=created,desc'
-
-Фильтрация:
-* Для фильтрации в запросе необходимо передавать в урле следующие (опциональные) параметры:
-  ?createdStart=18-03-2019&createdEnd=26-03-2019&modifiedStart=18-03-2019&modifiedEnd=26-03-2019&status=NEW&priority=1
-  Фильтрация реализована для метода получения полного списка задач (http://localhost:8080/projects/-/tasks)
-
-
-
+Please note: filtering is implemented only for method that requests all tasks for all projects: (http://localhost:8080/projects/-/tasks)
